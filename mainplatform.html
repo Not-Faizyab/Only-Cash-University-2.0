@@ -1,0 +1,2287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OCU Dashboard - The Control Room</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <link rel="stylesheet" href="mainplatform.css" />
+    <link
+      href="https://cdn.boxicons.com/3.0.3/fonts/basic/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!-- Background Streaks -->
+    <div class="bg-streaks">
+      <div class="streak"></div>
+      <div class="streak"></div>
+      <div class="streak"></div>
+      <div class="streak"></div>
+      <div class="streak"></div>
+    </div>
+
+    <!-- Top Command Bar -->
+    <div class="top-bar">
+      <div class="logo-section">
+        <div class="logo"><img class="logoimg" src="logo.png" alt="" /></div>
+        <div class="logo-text">
+          <h2>OnlyCashUniversity</h2>
+          <p>Digital Income Ecosystem</p>
+        </div>
+      </div>
+
+      <!-- Add this right after the logo-section div in your top-bar -->
+      <button class="menu-toggle-btn" id="menuToggleBtn">
+        <i class="bx bx-menu"></i>
+      </button>
+
+      <div class="progress-center">
+        <div class="progress-label">
+          💰 ₹7,200 / ₹10,000 Goal — 72% Complete 🚀
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" style="width: 72%"></div>
+        </div>
+      </div>
+
+      <div class="top-icons">
+        <div
+          onclick="handleLogout()"
+          class="icon-btn logout-btn"
+          title="Logout"
+        >
+          <i
+            class="bxr bx-arrow-out-right-square-half"
+            style="color: #ffffff"
+          ></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="nav-item active" data-section="dashboard">
+        <div class="nav-icon">
+          <i class="bxr bx-home" style="color: #ffffff"></i>
+        </div>
+        <div class="nav-label">Dashboard</div>
+      </div>
+
+      <div class="nav-item" data-section="programs">
+        <div class="nav-icon">
+          <i class="bxr bx-education" style="color: #ffffff"></i>
+        </div>
+        <div class="nav-label">My Programs</div>
+      </div>
+
+      <div class="nav-item" data-section="affiliate">
+        <div class="nav-icon">
+          <i class="bxr bx-wallet" style="color: #ffffff"></i>
+        </div>
+        <div class="nav-label">Affiliate System</div>
+      </div>
+
+      <div class="nav-item" data-section="resources">
+        <div class="nav-icon">
+          <i class="bxr bx-book-alt" style="color: #ffffff"></i>
+        </div>
+        <div class="nav-label">Resource Vault</div>
+      </div>
+
+      <div class="nav-item" data-section="community">
+        <div class="nav-icon">
+          <i class="bxr bx-message-circle-captions" style="color: #ffffff"></i>
+        </div>
+        <div class="nav-label">Community</div>
+      </div>
+
+      <div class="nav-item" data-section="growth">
+        <div class="nav-icon">
+          <i class="bxr bx-rocket" style="color: #ffffff"></i>
+        </div>
+        <div class="nav-label">Growth Program 🔒</div>
+      </div>
+
+      <div class="nav-item" data-section="support">
+        <div class="nav-icon">
+          <i class="bxr bx-phone" style="color: #ffffff"></i>
+        </div>
+        <div class="nav-label">Support</div>
+      </div>
+
+      <div
+        onclick="window.open('https://discord.gg/qnJmx82Zz', '_blank')"
+        class="sidebar-cta"
+      >
+        Join Discord Server
+      </div>
+    </div>
+
+    <section id="section-dashboard" class="section visible">
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Weekly Win Drop Banner (Sunday only) -->
+        <div class="weekly-banner" id="weeklyBanner" style="display: none">
+          <div class="banner-title">
+            🏆 OCU Members Earned ₹3.2L This Week. Your Share:
+            <span id="affTotalEarningscomm">₹0</span> 🔥
+          </div>
+          <p>Next Drop: Monday 10AM IST</p>
+          <p style="margin-top: 1rem; font-size: 0.9rem">
+            Stay consistent. Next week's win drop could be yours.
+          </p>
+        </div>
+
+        <h1 class="section-title">Your Performance Overview 🚀</h1>
+
+        <!-- Progress Overview -->
+        <div class="progress-overview">
+          <div class="progress-card">
+            <div class="card-title">Course Progress</div>
+            <p id="overall-progress-text">0% Complete — Keep Building.</p>
+            <div class="card-progress">
+              <div class="progress-bar-container">
+                <div
+                  class="progress-bar-fill"
+                  id="overall-progress-bar"
+                  style="width: 0%"
+                ></div>
+              </div>
+            </div>
+            <p
+              style="margin-top: 1rem; color: #a78bfa; font-size: 0.9rem"
+              id="progress-motivation"
+            >
+              Start your journey. Keep going.
+            </p>
+          </div>
+
+          <div class="progress-card">
+            <div class="card-title">Affiliate Progress</div>
+            <p>
+              <span id="affTotalEarningsprog">7,200 </span> Earned / ₹10,000
+              Goal
+            </p>
+            <div class="card-progress">
+              <div class="progress-bar-container">
+                <div
+                  class="progress-bar-fill"
+                  style="background: #be6eff"
+                ></div>
+              </div>
+            </div>
+            <p style="margin-top: 1rem; color: #a78bfa; font-size: 0.9rem">
+              2 Referrals away from your next milestone.
+            </p>
+          </div>
+        </div>
+
+        <!-- Compounding Wallet Card -->
+        <div class="wallet-card">
+          <div class="wallet-header">
+            <div class="wallet-title">💼 Your Digital Wallet</div>
+          </div>
+
+          <div class="wallet-stats">
+            <div class="wallet-stat">
+              <div id="affTotalEarningsdash" class="wallet-stat-value">
+                ₹89,600
+              </div>
+              <div class="wallet-stat-label">Total Earnings</div>
+            </div>
+            <div class="wallet-stat">
+              <div id="affPendingPayoutdash" class="wallet-stat-value">
+                ₹14,800
+              </div>
+              <div class="wallet-stat-label">Pending Payout</div>
+            </div>
+            <div class="wallet-stat">
+              <div class="wallet-stat-value">₹25,000</div>
+              <div class="wallet-stat-label">
+                Potential Earnings (Next Rank)
+              </div>
+            </div>
+          </div>
+
+          <p
+            style="
+              margin-top: 1rem;
+              text-align: center;
+              color: #a78bfa;
+              font-size: 0.9rem;
+            "
+          >
+            Every referral. Every lesson. Compounds into freedom.
+          </p>
+        </div>
+
+        <!-- Habit Stack Widget -->
+        <div class="habit-widget">
+          <div class="habit-header">
+            <div class="habit-title">3 Tasks For Today 🔁</div>
+            <div class="habit-subtitle">
+              Daily Execution = Lifetime Leverage.
+            </div>
+          </div>
+
+          <div class="habit-list">
+            <div class="habit-item completed" onclick="toggleHabit(this)">
+              <div class="habit-checkbox">✓</div>
+              <div>Watch 1 Lesson</div>
+            </div>
+            <div class="habit-item completed" onclick="toggleHabit(this)">
+              <div class="habit-checkbox">✓</div>
+              <div>Send 1 Affiliate DM</div>
+            </div>
+            <div class="habit-item" onclick="toggleHabit(this)">
+              <div class="habit-checkbox"></div>
+              <div>Check 1 Resource</div>
+            </div>
+          </div>
+
+          <p
+            style="
+              margin-top: 1.5rem;
+              text-align: center;
+              color: #a78bfa;
+              font-size: 0.9rem;
+            "
+          >
+            Maintain your 30-Day Streak to unlock Performer Badge.
+          </p>
+        </div>
+
+        <!-- Activity Snapshot Row -->
+        <div class="snapshot-row">
+          <div class="snapshot-card">
+            <div class="snapshot-icon">🎓</div>
+            <div class="snapshot-value" id="lessonsCount">42</div>
+            <div class="snapshot-label">Lessons Completed</div>
+          </div>
+          <div class="snapshot-card">
+            <div class="snapshot-icon">💰</div>
+            <div id="monthlyearrrnings" class="snapshot-value">₹8,900</div>
+            <div class="snapshot-label">Earnings This Month</div>
+          </div>
+          <div class="snapshot-card">
+            <div class="snapshot-icon">📈</div>
+            <div id="affConversionRate" class="snapshot-value">12%</div>
+            <div class="snapshot-label">Conversion Rate</div>
+          </div>
+        </div>
+
+        <p style="text-align: center; color: #a78bfa; margin-bottom: 3rem">
+          Progress isn't magic. It's data + daily moves.
+        </p>
+
+        <!-- Activity Feed -->
+        <div class="activity-feed">
+          <div class="feed-header">
+            <div>
+              <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem">
+                Live Member Activity 🔥
+              </h2>
+              <p style="color: #a78bfa; font-size: 0.9rem">
+                Watch the ecosystem move — real execution, real wins.
+              </p>
+            </div>
+            <div class="live-indicator">
+              <div class="live-dot"></div>
+              LIVE
+            </div>
+          </div>
+
+          <div class="feed-items" id="feedItems">
+            <div class="feed-item"></div>
+          </div>
+
+          <p
+            style="
+              margin-top: 1rem;
+              text-align: center;
+              color: #a78bfa;
+              font-size: 0.9rem;
+            "
+          >
+            OCU doesn't run on theories — it runs on movement.
+          </p>
+        </div>
+
+        <!-- Daily Quote Section -->
+        <div class="quote-section">
+          <div class="quote-title">💭 Today's Quote of Growth</div>
+          <div class="quote-text" id="dailyQuote">"Systems > Motivation."</div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+          <h3>
+            💎 Powered by OnlyCashUniversity — The Future of Digital Education.
+          </h3>
+          <p style="margin-top: 0.5rem; color: #a78bfa">
+            Every Click Compounds.
+          </p>
+          <p style="margin-top: 1rem; font-size: 0.8rem; color: #666">
+            Copyright © OCU 2025
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-programs" class="section">
+      <div class="prog-content-wrapper">
+        <!-- Header -->
+        <h1 class="prog-section-title">My Programs</h1>
+        <p class="prog-page-subtitle">
+          Your step-by-step digital income programs — where execution meets
+          results.
+        </p>
+
+        <!-- Programs Grid -->
+        <div class="prog-programs-grid">
+          <!-- Program Card 1: 6-Figure Store -->
+          <div
+            class="prog-program-card prog-glass"
+            data-program-id="6-figure-store"
+          >
+            <div class="prog-card-header">
+              <div class="prog-program-icon">🏪</div>
+              <div class="prog-progress-badge" data-progress-badge>
+                0% Complete
+              </div>
+            </div>
+            <div class="prog-card-content">
+              <h3 class="prog-program-title">
+                The 6-Figure Store (Dropshipping/E-commerce)
+              </h3>
+              <p class="prog-program-desc">
+                Build a high-converting e-commerce system that generates
+                consistent revenue.
+              </p>
+              <div class="prog-progress-container">
+                <div class="prog-progress-bar">
+                  <div
+                    class="prog-progress-fill"
+                    data-progress-fill
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="prog-program-meta">
+                <span data-modules-count>🎯 0 Modules</span>
+                <span data-lessons-count>🎓 0 Lessons</span>
+              </div>
+              <button class="prog-program-cta">Start Program →</button>
+            </div>
+          </div>
+
+          <!-- Program Card 2: Zero-to-Sales -->
+          <div
+            class="prog-program-card prog-glass"
+            data-program-id="zero-to-sales"
+          >
+            <div class="prog-card-header">
+              <div class="prog-program-icon">🚀</div>
+              <div class="prog-progress-badge" data-progress-badge>
+                0% Complete
+              </div>
+            </div>
+            <div class="prog-card-content">
+              <h3 class="prog-program-title">
+                Zero-to-Sales Launchpad (Digital Products Selling)
+              </h3>
+              <p class="prog-program-desc">
+                Learn to launch digital products that sell like crazy.
+              </p>
+              <div class="prog-progress-container">
+                <div class="prog-progress-bar">
+                  <div
+                    class="prog-progress-fill"
+                    data-progress-fill
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="prog-program-meta">
+                <span data-modules-count>🎯 0 Modules</span>
+                <span data-lessons-count>🎓 0 Lessons</span>
+              </div>
+              <button class="prog-program-cta">Start Program →</button>
+            </div>
+          </div>
+
+          <!-- Program Card 3: High-Ticket Client -->
+          <div
+            class="prog-program-card prog-glass"
+            data-program-id="high-ticket-client"
+          >
+            <div class="prog-card-header">
+              <div class="prog-program-icon">💼</div>
+              <div class="prog-progress-badge" data-progress-badge>
+                0% Complete
+              </div>
+            </div>
+            <div class="prog-card-content">
+              <h3 class="prog-program-title">
+                High-Ticket Client Machine (Freelancing)
+              </h3>
+              <p class="prog-program-desc">
+                Master freelancing and secure high-paying clients.
+              </p>
+              <div class="prog-progress-container">
+                <div class="prog-progress-bar">
+                  <div
+                    class="prog-progress-fill"
+                    data-progress-fill
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="prog-program-meta">
+                <span data-modules-count>🎯 0 Modules</span>
+                <span data-lessons-count>🎓 0 Lessons</span>
+              </div>
+              <button class="prog-program-cta">Start Program →</button>
+            </div>
+          </div>
+
+          <!-- Program Card 4: Wealth Pages -->
+          <div
+            class="prog-program-card prog-glass"
+            data-program-id="wealth-pages"
+          >
+            <div class="prog-card-header">
+              <div class="prog-program-icon">📱</div>
+              <div class="prog-progress-badge" data-progress-badge>
+                0% Complete
+              </div>
+            </div>
+            <div class="prog-card-content">
+              <h3 class="prog-program-title">
+                Wealth Pages Formula (IG Theme Pages)
+              </h3>
+              <p class="prog-program-desc">
+                Turn Instagram theme pages into passive income machines.
+              </p>
+              <div class="prog-progress-container">
+                <div class="prog-progress-bar">
+                  <div
+                    class="prog-progress-fill"
+                    data-progress-fill
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="prog-program-meta">
+                <span data-modules-count>🎯 0 Modules</span>
+                <span data-lessons-count>🎓 0 Lessons</span>
+              </div>
+              <button class="prog-program-cta">Start Program →</button>
+            </div>
+          </div>
+
+          <!-- Program Card 5: No-Product Profit -->
+          <div
+            class="prog-program-card prog-glass"
+            data-program-id="no-product-profit"
+          >
+            <div class="prog-card-header">
+              <div class="prog-program-icon">📧</div>
+              <div class="prog-progress-badge" data-progress-badge>
+                0% Complete
+              </div>
+            </div>
+            <div class="prog-card-content">
+              <h3 class="prog-program-title">
+                No-Product Profit (Affiliate Marketing)
+              </h3>
+              <p class="prog-program-desc">
+                Crack the code on affiliate marketing without inventory hassles.
+              </p>
+              <div class="prog-progress-container">
+                <div class="prog-progress-bar">
+                  <div
+                    class="prog-progress-fill"
+                    data-progress-fill
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="prog-program-meta">
+                <span data-modules-count>🎯 0 Modules</span>
+                <span data-lessons-count>🎓 0 Lessons</span>
+              </div>
+              <button class="prog-program-cta">Start Program →</button>
+            </div>
+          </div>
+
+          <!-- Program Card 6: Client Acquisition -->
+          <div
+            class="prog-program-card prog-glass"
+            data-program-id="client-acquisition"
+          >
+            <div class="prog-card-header">
+              <div class="prog-program-icon">📈</div>
+              <div class="prog-progress-badge" data-progress-badge>
+                0% Complete
+              </div>
+            </div>
+            <div class="prog-card-content">
+              <h3 class="prog-program-title">
+                Client Acquisition Mastery (SMMA)
+              </h3>
+              <p class="prog-program-desc">
+                Become a pro at securing clients for social media marketing
+                agencies.
+              </p>
+              <div class="prog-progress-container">
+                <div class="prog-progress-bar">
+                  <div
+                    class="prog-progress-fill"
+                    data-progress-fill
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="prog-program-meta">
+                <span data-modules-count>🎯 0 Modules</span>
+                <span data-lessons-count>🎓 0 Lessons</span>
+              </div>
+              <button class="prog-program-cta">Start Program →</button>
+            </div>
+          </div>
+
+          <!-- Program Card 7: Creators Monetization -->
+          <div
+            class="prog-program-card prog-glass"
+            data-program-id="creators-monetization"
+          >
+            <div class="prog-card-header">
+              <div class="prog-program-icon">🎨</div>
+              <div class="prog-progress-badge" data-progress-badge>
+                0% Complete
+              </div>
+            </div>
+            <div class="prog-card-content">
+              <h3 class="prog-program-title">
+                Creators Monetization (Content Creation)
+              </h3>
+              <p class="prog-program-desc">
+                Monetize your content and turn followers into income streams.
+              </p>
+              <div class="prog-progress-container">
+                <div class="prog-progress-bar">
+                  <div
+                    class="prog-progress-fill"
+                    data-progress-fill
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="prog-program-meta">
+                <span data-modules-count>🎯 0 Modules</span>
+                <span data-lessons-count>🎓 0 Lessons</span>
+              </div>
+              <button class="prog-program-cta">Start Program →</button>
+            </div>
+          </div>
+
+          <!-- Program Card 8: Prints to Profits -->
+          <div
+            class="prog-program-card prog-glass"
+            data-program-id="prints-to-profits"
+          >
+            <div class="prog-card-header">
+              <div class="prog-program-icon">🖨️</div>
+              <div class="prog-progress-badge" data-progress-badge>
+                0% Complete
+              </div>
+            </div>
+            <div class="prog-card-content">
+              <h3 class="prog-program-title">
+                Prints to Profits (Print on Demand)
+              </h3>
+              <p class="prog-program-desc">
+                Build a print-on-demand biz that sells custom designs worldwide.
+              </p>
+              <div class="prog-progress-container">
+                <div class="prog-progress-bar">
+                  <div
+                    class="prog-progress-fill"
+                    data-progress-fill
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="prog-program-meta">
+                <span data-modules-count>🎯 0 Modules</span>
+                <span data-lessons-count>🎓 0 Lessons</span>
+              </div>
+              <button class="prog-program-cta">Start Program →</button>
+            </div>
+          </div>
+
+          <!-- Program Card 9: Compounding Wealth -->
+          <div
+            class="prog-program-card prog-glass"
+            data-program-id="compounding-wealth"
+          >
+            <div class="prog-card-header">
+              <div class="prog-program-icon">💰</div>
+              <div class="prog-progress-badge" data-progress-badge>
+                0% Complete
+              </div>
+            </div>
+            <div class="prog-card-content">
+              <h3 class="prog-program-title">
+                Compounding Wealth Formula (Investing, Trading & Crypto)
+              </h3>
+              <p class="prog-program-desc">
+                Learn wealth-building strategies in investing, trading, and
+                crypto.
+              </p>
+              <div class="prog-progress-container">
+                <div class="prog-progress-bar">
+                  <div
+                    class="prog-progress-fill"
+                    data-progress-fill
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="prog-program-meta">
+                <span data-modules-count>🎯 0 Modules</span>
+                <span data-lessons-count>🎓 0 Lessons</span>
+              </div>
+              <button class="prog-program-cta">Start Program →</button>
+            </div>
+          </div>
+
+          <!-- Program Card 10: Peak Body -->
+          <div class="prog-program-card prog-glass" data-program-id="peak-body">
+            <div class="prog-card-header">
+              <div class="prog-program-icon">💪</div>
+              <div class="prog-progress-badge" data-progress-badge>
+                0% Complete
+              </div>
+            </div>
+            <div class="prog-card-content">
+              <h3 class="prog-program-title">
+                Peak Body Transformation (Fitness & Bodybuilding)
+              </h3>
+              <p class="prog-program-desc">
+                Achieve your best body with proven fitness and bodybuilding
+                strategies.
+              </p>
+              <div class="prog-progress-container">
+                <div class="prog-progress-bar">
+                  <div
+                    class="prog-progress-fill"
+                    data-progress-fill
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="prog-program-meta">
+                <span data-modules-count>🎯 0 Modules</span>
+                <span data-lessons-count>🎓 0 Lessons</span>
+              </div>
+              <button class="prog-program-cta">Start Program →</button>
+            </div>
+          </div>
+
+          <!-- Program Card 11: Mental Rewire -->
+          <div
+            class="prog-program-card prog-glass"
+            data-program-id="mental-rewire"
+          >
+            <div class="prog-card-header">
+              <div class="prog-program-icon">🧠</div>
+              <div class="prog-progress-badge" data-progress-badge>
+                0% Complete
+              </div>
+            </div>
+            <div class="prog-card-content">
+              <h3 class="prog-program-title">
+                Mental Rewire Program (Mindset & Development)
+              </h3>
+              <p class="prog-program-desc">
+                Reprogram your mind for success with cutting-edge development
+                hacks.
+              </p>
+              <div class="prog-progress-container">
+                <div class="prog-progress-bar">
+                  <div
+                    class="prog-progress-fill"
+                    data-progress-fill
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="prog-program-meta">
+                <span data-modules-count>🎯 0 Modules</span>
+                <span data-lessons-count>🎓 0 Lessons</span>
+              </div>
+              <button class="prog-program-cta">Start Program →</button>
+            </div>
+          </div>
+
+          <!-- Program Card 12: Ultimate Optimization -->
+          <div
+            class="prog-program-card prog-glass"
+            data-program-id="ultimate-optimization"
+          >
+            <div class="prog-card-header">
+              <div class="prog-program-icon">🔥</div>
+              <div class="prog-progress-badge" data-progress-badge>
+                0% Complete
+              </div>
+            </div>
+            <div class="prog-card-content">
+              <h3 class="prog-program-title">
+                Ultimate Human Optimization (Life Mastery)
+              </h3>
+              <p class="prog-program-desc">
+                Level up every area of your life with this ultimate optimization
+                program.
+              </p>
+              <div class="prog-progress-container">
+                <div class="prog-progress-bar">
+                  <div
+                    class="prog-progress-fill"
+                    data-progress-fill
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="prog-program-meta">
+                <span data-modules-count>🎯 0 Modules</span>
+                <span data-lessons-count>🎓 0 Lessons</span>
+              </div>
+              <button class="prog-program-cta">Start Program →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overall Progress Stats -->
+        <div class="prog-overall-stats prog-glass">
+          <h2 class="prog-stats-title">Your Learning Progress</h2>
+          <div class="prog-stats-grid">
+            <div class="prog-stat-item">
+              <div class="prog-stat-value" id="programs-started-stat">0/12</div>
+              <div class="prog-stat-label">Programs Started</div>
+            </div>
+            <div class="prog-stat-item">
+              <div class="prog-stat-value" id="lessons-completed-stat">0</div>
+              <div class="prog-stat-label">Lessons Completed</div>
+            </div>
+            <div class="prog-stat-item">
+              <div class="prog-stat-value" id="watch-time-stat">0h 0m</div>
+              <div class="prog-stat-label">Total Watch Time</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recommended Next -->
+        <h2 class="prog-section-heading">⚡ Recommended Next</h2>
+        <div class="prog-recommended-feed prog-glass">
+          <div class="prog-feed-item">
+            <span class="prog-feed-icon">📹</span>
+            <span class="prog-feed-text"
+              >Complete Module 3 in "The 6-Figure Store"</span
+            >
+          </div>
+          <div class="prog-feed-item">
+            <span class="prog-feed-icon">🚀</span>
+            <span class="prog-feed-text"
+              >Start "AI Automation Business" to unlock new skills</span
+            >
+          </div>
+          <div class="prog-feed-item">
+            <span class="prog-feed-icon">💡</span>
+            <span class="prog-feed-text"
+              >Watch: "Advanced Affiliate Strategies" masterclass</span
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-affiliateprogram" class="section">
+      <div class="progsec">
+        <div class="prog-program-header">
+          <div class="prog-header-content">
+            <div class="prog-header-left">
+              <h1 class="prog-program-title">Loading...</h1>
+              <p class="prog-program-desc">Loading program details...</p>
+              <div class="prog-program-stats">
+                <span class="prog-stat">🎯 0 Modules</span>
+                <span class="prog-stat">🎓 0 Lessons</span>
+              </div>
+              <div class="prog-progress-tracker">📊 0% Complete</div>
+            </div>
+            <div class="prog-header-right">
+              <button class="prog-cta-btn">Continue Learning →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="prog-main-content">
+          <!-- Video Section -->
+          <div class="prog-video-section">
+            <div class="prog-video-container">
+              <div class="prog-lesson-indicator">Lesson 0 of 0</div>
+
+              <!-- ACTUAL VIDEO PLAYER -->
+              <video
+                id="prog-video-player"
+                class="prog-video-player-element"
+                controls
+                style="
+                  width: 100%;
+                  aspect-ratio: 16/9;
+                  background: #000;
+                  display: block;
+                "
+              >
+                <source id="video-source" src="" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+
+              <div class="prog-video-info">
+                <h2 class="prog-lesson-title">Loading Lesson...</h2>
+                <p class="prog-lesson-summary">
+                  Please wait while we load your lesson content.
+                </p>
+                <div class="prog-video-controls">
+                  <button
+                    class="prog-control-btn prog-completed"
+                    onclick="markAsCompleted()"
+                  >
+                    Mark as Completed
+                  </button>
+                  <div class="prog-toggle-switch">
+                    <span>Autoplay Next</span>
+                    <div
+                      class="prog-switch"
+                      id="autoplay-toggle"
+                      onclick="toggleAutoplay(this)"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modules Panel -->
+          <div class="prog-modules-panel">
+            <h3 class="prog-panel-title">Course Modules</h3>
+            <!-- Modules will be dynamically inserted here by JavaScript -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-affiliate" class="section">
+      <!-- Live Notification -->
+      <div class="aff-live-notification" id="affLiveNotification">
+        +₹450 just added! 🎉
+      </div>
+
+      <div class="aff-container">
+        <!-- Header -->
+        <h1 class="aff-main-title">Your Earnings Overview</h1>
+
+        <!-- Earnings Cards -->
+        <div class="aff-earnings-grid">
+          <div class="aff-earning-card">
+            <div class="aff-icon">💵</div>
+            <div class="aff-label">Total Earnings</div>
+            <div class="aff-amount" id="affTotalEarnings">₹0</div>
+            <div class="aff-subtext">All-time earnings</div>
+          </div>
+
+          <div class="aff-earning-card">
+            <div class="aff-icon">🔁</div>
+            <div class="aff-label">Pending Commissions</div>
+            <div class="aff-amount" id="affPendingPayout">₹0</div>
+            <div class="aff-subtext">Next payout: Err</div>
+          </div>
+
+          <div class="aff-earning-card">
+            <div class="aff-icon">🧾</div>
+            <div class="aff-label">Total Referrals</div>
+            <div class="aff-amount" id="affTotalReferrals">0</div>
+            <div class="aff-subtext">People joined through you</div>
+          </div>
+
+          <div class="aff-earning-card">
+            <div class="aff-icon">🗓</div>
+            <div class="aff-label">This Month's Earnings</div>
+            <div class="aff-amount" id="monthlyearrrrnings">₹34,234</div>
+            <div class="aff-subtext"></div>
+          </div>
+        </div>
+
+        <!-- Calculator Section -->
+        <div class="aff-calculator-section">
+          <h2>See How Much You Can Earn With OCU</h2>
+          <div class="aff-calc-inputs">
+            <div class="aff-input-group">
+              <label>Members Referred</label>
+              <input type="number" id="affMembersReferred" value="10" min="0" />
+            </div>
+            <div class="aff-input-group">
+              <label>Commission Rate (%)</label>
+              <input
+                type="number"
+                id="affCommissionRate"
+                value="50"
+                min="0"
+                max="100"
+              />
+            </div>
+          </div>
+          <div class="aff-result-box">
+            <div>Estimated Daily Earnings:</div>
+            <div class="aff-result-amount" id="affMonthlyResult">₹12,450</div>
+            <div class="aff-result-yearly">
+              🚀 Yearly Potential: <span id="affYearlyResult">₹1,49,400</span>
+            </div>
+            <div class="aff-result-subtext">
+              "More learners you bring → more income you unlock."
+            </div>
+          </div>
+        </div>
+
+        <div class="aff-payout-setup-section">
+          <h2>Setup Your Payout</h2>
+          <div class="aff-payout-setup-card">
+            <div class="aff-setup-icon">🏦</div>
+            <p class="aff-setup-description">
+              Add your UPI ID to unlock your referal link and receive commission
+              payouts directly to your account.
+            </p>
+
+            <div class="aff-upi-input-group">
+              <label for="affUpiId">UPI ID</label>
+              <input
+                type="text"
+                id="affUpiId"
+                class="aff-upi-input"
+                placeholder="yourname@okaxis"
+                value=""
+              />
+              <div class="aff-upi-hint">
+                💡 Enter your UPI ID (e.g., yourname@okaxis)
+              </div>
+            </div>
+
+            <button class="aff-save-upi-btn" id="affSaveUpiBtn">
+              Save UPI ID
+            </button>
+
+            <div class="aff-upi-status" id="affUpiStatus" style="display: none">
+              ✅ UPI ID saved successfully!
+            </div>
+          </div>
+        </div>
+
+        <!-- Affiliate Link Hub -->
+        <div class="aff-link-hub">
+          <h2>💎 Your Referral Link Is Your Digital Asset</h2>
+          <div class="aff-link-container">
+            <input
+              type="text"
+              class="aff-link-input"
+              id="affReferralLink"
+              value="Generating Link..."
+              readonly
+            />
+            <button class="aff-copy-btn" id="affCopyBtn">📋 Copy Link</button>
+          </div>
+        </div>
+
+        <!-- Progression System -->
+        <div class="aff-progression-section">
+          <h2>Your Affiliate Journey</h2>
+          <div class="aff-current-tier">
+            <span class="aff-tier-badge">🥉</span>
+            <div>
+              You're currently:
+              <strong style="color: #00ff88">Starter (Level 1)</strong>
+            </div>
+          </div>
+
+          <div class="aff-tiers-grid">
+            <!-- Tier 1: Starter (0-9 conversions) -->
+            <div class="aff-tier-card">
+              <div class="aff-tier-icon">🥉</div>
+              <div class="aff-tier-name">Starter</div>
+              <div class="aff-tier-range">0-9 referrals</div>
+              <div class="aff-tier-earnings">Avg: ₹5K-₹15K/month</div>
+              <div class="aff-tier-benefits">
+                • Basic affiliate tools<br />
+                • 50% commission
+              </div>
+            </div>
+
+            <!-- Tier 2: Hustler (10-49 conversions) -->
+            <div class="aff-tier-card">
+              <div class="aff-tier-icon">🥈</div>
+              <div class="aff-tier-name">Hustler</div>
+              <div class="aff-tier-range">10-49 referrals</div>
+              <div class="aff-tier-earnings">Avg: ₹15K-₹50K/month</div>
+              <div class="aff-tier-benefits">
+                • Priority support<br />
+                • Marketing materials<br />
+                • 55% commission
+              </div>
+            </div>
+
+            <!-- Tier 3: Elite Partner (50-99 conversions) -->
+            <div class="aff-tier-card">
+              <div class="aff-tier-icon">🥇</div>
+              <div class="aff-tier-name">Elite Partner</div>
+              <div class="aff-tier-range">50-99 referrals</div>
+              <div class="aff-tier-earnings">Avg: ₹50K-₹1.5L/month</div>
+              <div class="aff-tier-benefits">
+                • Dedicated manager<br />
+                • Custom campaigns<br />
+                • 60% commission
+              </div>
+            </div>
+
+            <!-- Tier 4: OCU Partner Pro (100+ conversions) -->
+            <div class="aff-tier-card">
+              <div class="aff-tier-icon">💎</div>
+              <div class="aff-tier-name">OCU Partner Pro</div>
+              <div class="aff-tier-range">100+ referrals</div>
+              <div class="aff-tier-earnings">Avg: ₹1.5L-₹5L+/month</div>
+              <div class="aff-tier-benefits">
+                • Revenue share deals<br />
+                • White-label options<br />
+                • 65% commission
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payout History -->
+        <div class="aff-payout-section">
+          <h2>🧾 Payout & History</h2>
+          <table class="aff-payout-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th class="tableupi">UPI ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+          <div class="aff-payout-subtext">
+            "Your commissions are automatically deposited every 1st of the
+            month."
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-resources" class="section">
+      <div class="content-wrapper">
+        <!-- Header -->
+        <h1 class="page-title">Resource Vault</h1>
+        <p class="page-subtitle">
+          All tools, templates, and scripts you need to execute.<br />
+          <span style="opacity: 0.7"
+            >Directly linked to our private Discord for instant access.</span
+          >
+        </p>
+
+        <!-- Discord CTA Banner -->
+        <div class="discord-banner glass-card">
+          <div class="discord-content">
+            <h3>Join the OCU Discord Server</h3>
+            <p>
+              Access all resources, connect with members, and get real-time
+              support
+            </p>
+          </div>
+          <button
+            onclick="window.open('https://discord.gg/qnJmx82Zz', '_blank')"
+            class="discord-btn"
+          >
+            OPEN DISCORD VAULT →
+          </button>
+        </div>
+
+        <!-- Resources Grid -->
+        <div class="resources-grid">
+          <!-- Card 1 -->
+          <div class="resource-card glass-card">
+            <div class="card-badge new">🔥 NEW</div>
+            <div class="resource-icon">🧱</div>
+            <h3 class="resource-title">Scripts & Sales Copy</h3>
+            <p class="resource-desc">
+              Access plug-and-play script templates for DMs, ads, and video
+              content.
+            </p>
+            <div class="resource-stats">
+              <span>📄 47 Templates</span>
+              <span>🔄 Updated Daily</span>
+            </div>
+            <button
+              class="resource-btn"
+              onclick="window.open('https://discord.gg/qnJmx82Zz', '_blank')"
+              class="discord-btn"
+            >
+              View on Discord →
+            </button>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="resource-card glass-card">
+            <div class="resource-icon">🧠</div>
+            <h3 class="resource-title">AI Tools & Automation</h3>
+            <p class="resource-desc">
+              Cutting-edge AI tools to automate your business and save hours
+              daily.
+            </p>
+            <div class="resource-stats">
+              <span>🤖 23 Tools</span>
+              <span>⚡ Auto-Sync</span>
+            </div>
+            <button
+              class="resource-btn"
+              onclick="window.open('https://discord.gg/qnJmx82Zz', '_blank')"
+              class="discord-btn"
+            >
+              View on Discord →
+            </button>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="resource-card glass-card">
+            <div class="card-badge new">🔥 NEW</div>
+            <div class="resource-icon">🎨</div>
+            <h3 class="resource-title">Content Creation & Design</h3>
+            <p class="resource-desc">
+              Templates, graphics, and design systems for creating viral
+              content.
+            </p>
+            <div class="resource-stats">
+              <span>🖼️ 150+ Assets</span>
+              <span>🎬 Video Templates</span>
+            </div>
+            <button
+              class="resource-btn"
+              onclick="window.open('https://discord.gg/qnJmx82Zz', '_blank')"
+              class="discord-btn"
+            >
+              View on Discord →
+            </button>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="resource-card glass-card">
+            <div class="resource-icon">💰</div>
+            <h3 class="resource-title">Affiliate & Funnels</h3>
+            <p class="resource-desc">
+              High-converting funnel templates and affiliate marketing
+              resources.
+            </p>
+            <div class="resource-stats">
+              <span>📊 32 Funnels</span>
+              <span>💸 Proven ROI</span>
+            </div>
+            <button
+              class="resource-btn"
+              onclick="window.open('https://discord.gg/qnJmx82Zz', '_blank')"
+              class="discord-btn"
+            >
+              View on Discord →
+            </button>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="resource-card glass-card">
+            <div class="resource-icon">⚙️</div>
+            <h3 class="resource-title">Systems & Checklists</h3>
+            <p class="resource-desc">
+              Step-by-step systems and checklists to execute like a pro.
+            </p>
+            <div class="resource-stats">
+              <span>✅ 18 Systems</span>
+              <span>📋 40+ Checklists</span>
+            </div>
+            <button
+              class="resource-btn"
+              onclick="window.open('https://discord.gg/qnJmx82Zz', '_blank')"
+              class="discord-btn"
+            >
+              View on Discord →
+            </button>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="resource-card glass-card">
+            <div class="resource-icon">🧾</div>
+            <h3 class="resource-title">Legal & Business Docs</h3>
+            <p class="resource-desc">
+              Contracts, privacy policies, and legal templates for your
+              business.
+            </p>
+            <div class="resource-stats">
+              <span>📜 15 Documents</span>
+              <span>⚖️ Legal-Ready</span>
+            </div>
+            <button
+              class="resource-btn"
+              onclick="window.open('https://discord.gg/qnJmx82Zz', '_blank')"
+              class="discord-btn"
+            >
+              View on Discord →
+            </button>
+          </div>
+        </div>
+
+        <!-- Recommended This Week -->
+        <h2 class="section-heading">🔥 Recommended This Week</h2>
+        <div class="recommended-feed glass-card">
+          <div class="feed-item">
+            <span class="feed-icon">🔥</span>
+            <span class="feed-text">New Drop: Theme Page Viral Hooks Pack</span>
+          </div>
+          <div class="feed-item">
+            <span class="feed-icon">💬</span>
+            <span class="feed-text">100 Chat Automation Scripts Added</span>
+          </div>
+          <div class="feed-item">
+            <span class="feed-icon">⚙️</span>
+            <span class="feed-text"
+              >New: SMMA Client System Template (Free)</span
+            >
+          </div>
+          <div class="feed-item">
+            <span class="feed-icon">📧</span>
+            <span class="feed-text">Email Sequence Templates Updated</span>
+          </div>
+        </div>
+
+        <!-- Bottom CTA -->
+        <div class="bottom-cta">
+          <p class="cta-text">
+            Execution Starts Here — Access All Resources Now.
+          </p>
+          <button
+            onclick="window.open('https://discord.gg/qnJmx82Zz', '_blank')"
+            class="cta-btn"
+          >
+            OPEN DISCORD VAULT →
+          </button>
+          <p class="cta-subtext">
+            Everything you need to build, automate, and grow your income systems
+            — updated weekly.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- OCU COMMUNITY HUB -->
+    <section id="section-community" class="section">
+      <!-- SECTION 1: HERO BANNER -->
+      <div class="commm-hero-section">
+        <div class="commm-hero-grid-bg"></div>
+        <div class="commm-hero-content">
+          <h1 class="commm-hero-title">OCU COMMUNITY HUB</h1>
+          <p class="commm-hero-subtitle">
+            Connect with OCU members — share wins, strategies, and execution.
+          </p>
+          <a href="https://discord.gg/qnJmx82Zz" class="commm-hero-cta">
+            Join The Private Discord Community →
+          </a>
+        </div>
+      </div>
+
+      <!-- SECTION 2: MEMBER WINS (3 CARDS) -->
+      <div class="commm-wins-section">
+        <h2 class="commm-section-title">🏆 Member Wins</h2>
+
+        <div class="commm-wins-grid">
+          <!-- Card 1 -->
+          <div class="commm-win-card">
+            <div class="commm-win-header">
+              <span class="commm-win-name">Arjun Mehta</span>
+              <span class="commm-win-badge">Pro Member</span>
+            </div>
+            <p class="commm-win-text">
+              "Just hit my first ₹10,000 using the OCU No-Product Profit
+              system!"
+            </p>
+            <div class="commm-win-icons">
+              <span class="commm-win-icon">🔥</span>
+              <span class="commm-win-icon">💰</span>
+              <span class="commm-win-icon">🚀</span>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="commm-win-card">
+            <div class="commm-win-header">
+              <span class="commm-win-name">Sneha Patel</span>
+              <span class="commm-win-badge">Top Affiliate</span>
+            </div>
+            <p class="commm-win-text">
+              "Got my first high-ticket client after 30 days of consistent
+              posting!"
+            </p>
+            <div class="commm-win-icons">
+              <span class="commm-win-icon">💎</span>
+              <span class="commm-win-icon">📈</span>
+              <span class="commm-win-icon">⚡</span>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="commm-win-card">
+            <div class="commm-win-header">
+              <span class="commm-win-name">Rahul Singh</span>
+              <span class="commm-win-badge">Fast Learner</span>
+            </div>
+            <p class="commm-win-text">
+              "First funnel done, 3 leads in 24 hours using Resource Vault
+              templates!"
+            </p>
+            <div class="commm-win-icons">
+              <span class="commm-win-icon">🎯</span>
+              <span class="commm-win-icon">💪</span>
+              <span class="commm-win-icon">🔥</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: SOCIAL PROOF / JOIN MESSAGE -->
+      <div class="commm-social-proof-section">
+        <div class="commm-social-proof-card">
+          <h3 class="commm-social-proof-title">Join like-minded people</h3>
+          <p class="commm-social-proof-text">
+            Inside the OCU Discord, members help each other grow, share results,
+            and build wealth systems together.
+            <br /><br />
+            <strong>Your network decides your results — upgrade it.</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- SECTION 4: INSIDE THE COMMUNITY (4 TILES) -->
+      <div class="commm-features-section">
+        <h2 class="commm-section-title">Inside The Community</h2>
+
+        <div class="commm-features-grid">
+          <div class="commm-feature-tile">
+            <div class="commm-feature-icon">💬</div>
+            <h3 class="commm-feature-title">Execution Chat</h3>
+            <p class="commm-feature-desc">
+              Live strategies, questions, support.
+            </p>
+          </div>
+
+          <div class="commm-feature-tile">
+            <div class="commm-feature-icon">🏆</div>
+            <h3 class="commm-feature-title">Wins Channel</h3>
+            <p class="commm-feature-desc">
+              Members posting daily earnings & progress.
+            </p>
+          </div>
+
+          <div class="commm-feature-tile">
+            <div class="commm-feature-icon">📦</div>
+            <h3 class="commm-feature-title">Resource Drops</h3>
+            <p class="commm-feature-desc">
+              Exclusive templates, funnels & scripts.
+            </p>
+          </div>
+
+          <div class="commm-feature-tile">
+            <div class="commm-feature-icon">⚡</div>
+            <h3 class="commm-feature-title">Weekly Challenges</h3>
+            <p class="commm-feature-desc">
+              Build fast → Show progress → Earn rewards.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: FINAL CTA -->
+      <div class="commm-final-cta-section">
+        <div class="commm-final-cta-content">
+          <h2 class="commm-final-cta-title">
+            Join The Network — Build With Us
+          </h2>
+          <p class="commm-final-cta-subtitle">
+            Get accountability, support, and execution-focused guidance from the
+            OCU tribe.
+          </p>
+          <a href="https://discord.gg/qnJmx82Zz" class="commm-final-cta-button">
+            Enter The Private Discord Community →
+          </a>
+          <p class="commm-final-cta-subtext">
+            Your environment decides your success, choose the right one.
+          </p>
+        </div>
+      </div>
+
+      <!-- SECTION 6: FOOTER -->
+      <footer class="commm-footer">
+        <p>OnlyCashUniversity © 2025 — Digital Income Ecosystem</p>
+      </footer>
+    </section>
+
+    <section id="section-growth" class="section">
+      <div class="growth-content-wrapper">
+        <!-- Lock Icon Hero -->
+        <div class="growth-lock-hero">
+          <div class="growth-lock-icon">🔒</div>
+        </div>
+
+        <!-- Header -->
+        <h1 class="growth-main-title">OCU Growth Program</h1>
+        <h2 class="growth-subtitle">Private Mentorship Access</h2>
+        <p class="growth-intro">
+          Private 1:1 Mentorship & Customized Income Systems <br />
+          Work directly with top mentors to build and scale your online income.
+          <br />
+          Personalized roadmap, accountability & progress.
+        </p>
+
+        <!-- Feature Cards Grid -->
+        <div class="growth-features-grid">
+          <!-- Feature Card 1 -->
+          <div class="growth-feature-card growth-glass">
+            <div class="growth-feature-icon">🧭</div>
+            <h3 class="growth-feature-title">Personalized 1:1 Mentorship</h3>
+            <p class="growth-feature-desc">
+              Get private calls and audits from industry experts guiding you
+              through every step of your digital business journey. No theory —
+              only real strategies and systems.
+            </p>
+          </div>
+
+          <!-- Feature Card 2 -->
+          <div class="growth-feature-card growth-glass">
+            <div class="growth-feature-icon">📈</div>
+            <h3 class="growth-feature-title">Guaranteed Growth Path</h3>
+            <p class="growth-feature-desc">
+              You'll be assigned a structured, personalized plan to hit your
+              first ₹50,000–₹1L milestone online. Money Back Guarantee if you
+              don't make progress.
+            </p>
+          </div>
+
+          <!-- Feature Card 3 -->
+          <div class="growth-feature-card growth-glass">
+            <div class="growth-feature-icon">🧩</div>
+            <h3 class="growth-feature-title">Private Access Resources</h3>
+            <p class="growth-feature-desc">
+              Templates, systems, and scripts used by top earners. Includes
+              exclusive high-converting funnels, content packs, and unreleased
+              materials.
+            </p>
+          </div>
+
+          <!-- Feature Card 4 -->
+          <div class="growth-feature-card growth-glass">
+            <div class="growth-feature-icon">💬</div>
+            <h3 class="growth-feature-title">Inner Circle Group</h3>
+            <p class="growth-feature-desc">
+              Network privately with other elite OCU members. Exchange insights,
+              collaborate on projects, and gain lifetime access to the most
+              powerful business circle in India.
+            </p>
+          </div>
+        </div>
+
+        <!-- Money Back Guarantee Box -->
+        <div class="growth-guarantee-box growth-glass">
+          <div class="growth-shield-icon">🛡️</div>
+          <h2 class="growth-guarantee-title">💵 100% Risk-Free Enrollment</h2>
+          <p class="growth-guarantee-text">
+            If you apply the given steps, follow our systems and don't make
+            progress, you'll receive your full money back — no forms, no
+            friction, no fake promises.
+          </p>
+        </div>
+
+        <!-- Pricing CTA Section -->
+        <div class="growth-pricing-section growth-glass">
+          <h2 class="growth-pricing-title">Unlock Your Growth Program</h2>
+          <p class="growth-pricing-subtitle">
+            One-time investment for lifetime mentorship access and guaranteed
+            progress
+          </p>
+          <div class="growth-price-display">
+            <span class="growth-price-amount">₹4,999</span>
+            <span class="growth-price-label">One-Time Payment</span>
+          </div>
+          <button class="growth-unlock-btn">UNLOCK MY GROWTH PROGRAM →</button>
+          <p class="growth-pricing-note">
+            Limited spots available. This is not a course — this is mentorship.
+          </p>
+        </div>
+
+        <!-- Benefits List -->
+        <div class="growth-benefits-section">
+          <h3 class="growth-benefits-title">What You Get Inside:</h3>
+          <div class="growth-benefits-grid">
+            <div class="growth-benefit-item growth-glass">
+              <div class="growth-benefit-icon">
+                <i class="bxr bx-check" style="color: #ffffff"></i>
+              </div>
+              <div class="growth-benefit-text">
+                Private 1:1 calls with mentors
+              </div>
+            </div>
+            <div class="growth-benefit-item growth-glass">
+              <div class="growth-benefit-icon">
+                <i class="bxr bx-check" style="color: #ffffff"></i>
+              </div>
+              <div class="growth-benefit-text">Personalized income roadmap</div>
+            </div>
+            <div class="growth-benefit-item growth-glass">
+              <div class="growth-benefit-icon">
+                <i class="bxr bx-check" style="color: #ffffff"></i>
+              </div>
+              <div class="growth-benefit-text">
+                Exclusive resources & templates
+              </div>
+            </div>
+            <div class="growth-benefit-item growth-glass">
+              <div class="growth-benefit-icon">
+                <i class="bxr bx-check" style="color: #ffffff"></i>
+              </div>
+              <div class="growth-benefit-text">Elite member network access</div>
+            </div>
+            <div class="growth-benefit-item growth-glass">
+              <div class="growth-benefit-icon">
+                <i class="bxr bx-check" style="color: #ffffff"></i>
+              </div>
+              <div class="growth-benefit-text">
+                Weekly accountability check-ins
+              </div>
+            </div>
+            <div class="growth-benefit-item growth-glass">
+              <div class="growth-benefit-icon">
+                <i class="bxr bx-check" style="color: #ffffff"></i>
+              </div>
+              <div class="growth-benefit-text">Lifetime program updates</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quote Section -->
+        <div class="growth-quote-section">
+          <p class="growth-quote-text">
+            "Growth isn't a coincidence — it's engineered."
+          </p>
+        </div>
+
+        <!-- Final CTA -->
+        <div class="growth-final-cta">
+          <h3 class="growth-final-title">Ready to Level Up?</h3>
+          <p class="growth-final-subtitle">
+            Join the elite tier of OCU members who are serious about building
+            real income systems.
+          </p>
+          <button class="growth-final-btn">🚀 UNLOCK GROWTH PROGRAM NOW</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-support" class="section">
+      <div class="support-container">
+        <!-- Header Section -->
+        <div class="support-header">
+          <h1>Welcome to the OCU Support Center</h1>
+          <p>
+            We're here to make sure your journey stays smooth. Whether you need
+            help or guidance, everything starts here.
+          </p>
+          <div class="support-response-time">
+            <div class="support-live-dot"></div>
+            Average response time: under 3 hours
+          </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="support-search-container">
+          <i class="bx bx-search support-search-icon"></i>
+          <input
+            type="text"
+            class="support-search-box"
+            placeholder="Type your question (e.g. refund, login issue, affiliate help...)"
+          />
+        </div>
+
+        <!-- Quick Action Grid -->
+        <div class="support-actions-grid">
+          <a href="#faqscroll">
+            <div class="support-action-card">
+              <i
+                class="bx bx-brain support-card-icon"
+                style="color: #a78bfa"
+              ></i>
+              <h3 class="support-card-title">Learning & Account Issues</h3>
+              <p class="support-card-desc">
+                Can't access modules? Facing progress errors? Start here.
+              </p>
+            </div>
+          </a>
+
+          <a href="#faqscroll">
+            <div class="support-action-card">
+              <i
+                class="bx bx-wallet support-card-icon"
+                style="color: #fbbf24"
+              ></i>
+              <h3 class="support-card-title">Payments & Refunds</h3>
+              <p class="support-card-desc">
+                Having payment issues or need refund info? We got you covered.
+              </p>
+            </div>
+          </a>
+
+          <a href="#faqscroll">
+            <div class="support-action-card">
+              <i
+                class="bx bx-network-chart support-card-icon"
+                style="color: #00ff88"
+              ></i>
+              <h3 class="support-card-title">Affiliate Help</h3>
+              <p class="support-card-desc">
+                Problems with affiliate links, commissions, or dashboard? Tap
+                here.
+              </p>
+            </div>
+          </a>
+
+          <a href="#faqscroll">
+            <div class="support-action-card">
+              <i class="bx bx-cog support-card-icon" style="color: #c084fc"></i>
+              <h3 class="support-card-title">Technical Support</h3>
+              <p class="support-card-desc">
+                Facing bugs or glitches inside your dashboard? Report them.
+              </p>
+            </div>
+          </a>
+
+          <a href="#faqscroll">
+            <div class="support-action-card">
+              <i
+                class="bx bx-receipt support-card-icon"
+                style="color: #60a5fa"
+              ></i>
+              <h3 class="support-card-title">Billing & Membership</h3>
+              <p class="support-card-desc">
+                Update or cancel your subscription anytime.
+              </p>
+            </div>
+          </a>
+
+          <a href="#faqscroll">
+            <div class="support-action-card">
+              <i
+                class="bx bx-message-dots support-card-icon"
+                style="color: #f472b6"
+              ></i>
+              <h3 class="support-card-title">Other Queries</h3>
+              <p class="support-card-desc">
+                Anything else? Our team will get back within 24h.
+              </p>
+            </div>
+          </a>
+        </div>
+
+        <!-- Support Zone -->
+        <div class="support-zone-grid">
+          <div class="support-zone-card">
+            <div class="support-zone-status">
+              <div class="support-live-dot"></div>
+              OCU Support is Online
+            </div>
+            <h3 class="support-zone-title">Live Chat Support</h3>
+            <p class="support-zone-desc">
+              Need human help? Start a chat with an OCU Specialist
+            </p>
+            <button
+              onclick="window.location.href='mailto:support@onlycashuniversity.com'"
+              class="support-zone-btn"
+            >
+              <i class="bx bx-message-rounded-dots"></i>
+              Start Chat Now
+            </button>
+          </div>
+
+          <div class="support-zone-card">
+            <h3 class="support-zone-title">Need Human Help?</h3>
+            <p class="support-zone-desc">Talk to an agent directly</p>
+
+            <div class="support-contact-info">
+              <div class="support-contact-item">
+                <i
+                  class="bx bxl-whatsapp"
+                  style="font-size: 1.5rem; color: #25d366"
+                ></i>
+                <span>WhatsApp Support</span>
+              </div>
+              <div class="support-contact-item">
+                <i
+                  class="bx bx-envelope"
+                  style="font-size: 1.5rem; color: #a78bfa"
+                ></i>
+                <span>support@onlycashuniversity.com</span>
+              </div>
+              <div class="support-contact-item">
+                <i
+                  class="bx bx-time"
+                  style="font-size: 1.5rem; color: #fbbf24"
+                ></i>
+                <span>Response Time: 2-6 hours</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Refund & Guarantee Center -->
+        <div class="support-refund-section">
+          <div class="support-refund-icon">🛡️</div>
+          <h2 class="support-refund-title">
+            Money-Back Guarantee & Refund Process
+          </h2>
+          <p class="support-refund-text">
+            We stand behind every member. If you've followed the steps and
+            didn't achieve results, we'll refund you under our verified
+            conditions.
+          </p>
+
+          <div class="support-refund-steps">
+            <div class="support-refund-step">
+              <div class="support-step-number">1</div>
+              <div class="support-step-text">
+                Submit refund request form (Click to read terms)
+              </div>
+            </div>
+            <div class="support-refund-step">
+              <div class="support-step-number">2</div>
+              <div class="support-step-text">Our system checks eligibility</div>
+            </div>
+            <div class="support-refund-step">
+              <div class="support-step-number">3</div>
+              <div class="support-step-text">
+                Refund processed in 2-4 business days
+              </div>
+            </div>
+          </div>
+
+          <div class="buttonsupportwrap">
+            <button
+              onclick="window.location.href='mailto:support@onlycashuniversity.com'"
+              class="support-refund-btn"
+            >
+              Submit Refund Request →
+            </button>
+
+            <div class="support-trust-badge">
+              <i class="bx bx-shield-quarter"></i>
+              OCU Member Protection Program
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed FAQ Sections -->
+        <div id="faqscroll" class="support-detailed-faq">
+          <h2 class="support-kb-title">💡 Frequently Asked Questions</h2>
+
+          <!-- FAQ Category 1: Payments & Refunds -->
+          <div class="support-faq-section">
+            <div class="support-faq-header" onclick="toggleFAQSection(this)">
+              <div class="support-faq-header-content">
+                <i
+                  class="bx bx-wallet"
+                  style="color: #fbbf24; font-size: 1.5rem"
+                ></i>
+                <h3>Payments & Refunds</h3>
+              </div>
+              <i class="bx bx-chevron-down support-faq-arrow"></i>
+            </div>
+            <div class="support-faq-content">
+              <div class="support-faq-item">
+                <div class="support-faq-question" onclick="toggleFAQ(this)">
+                  <i class="bx bx-help-circle"></i>
+                  <span>How do I request a refund?</span>
+                  <i class="bx bx-chevron-down support-faq-toggle"></i>
+                </div>
+                <div class="support-faq-answer">
+                  You can request a refund from your Billing Settings or email
+                  us directly at support@onlycashuniversity.com with your
+                  payment details. Make sure to include your order ID and reason
+                  for refund.
+                </div>
+              </div>
+              <div class="support-faq-item">
+                <div class="support-faq-question" onclick="toggleFAQ(this)">
+                  <i class="bx bx-help-circle"></i>
+                  <span>How long does it take to process?</span>
+                  <i class="bx bx-chevron-down support-faq-toggle"></i>
+                </div>
+                <div class="support-faq-answer">
+                  Refunds are processed within 3-5 business days depending on
+                  your bank or payment method. You'll receive a confirmation
+                  email once initiated.
+                </div>
+              </div>
+              <div class="support-faq-item">
+                <div class="support-faq-question" onclick="toggleFAQ(this)">
+                  <i class="bx bx-help-circle"></i>
+                  <span>How does the Money Back Guarantee work?</span>
+                  <i class="bx bx-chevron-down support-faq-toggle"></i>
+                </div>
+                <div class="support-faq-answer">
+                  If you implement the lessons and don't make any money within
+                  the guarantee period, we refund you - no questions asked.
+                  Terms apply to ensure fair use and genuine effort. You must
+                  complete at least 80% of the program and provide proof of
+                  implementation.
+                </div>
+              </div>
+              <div class="support-faq-item">
+                <div class="support-faq-question" onclick="toggleFAQ(this)">
+                  <i class="bx bx-help-circle"></i>
+                  <span>Can I upgrade/downgrade my plan?</span>
+                  <i class="bx bx-chevron-down support-faq-toggle"></i>
+                </div>
+                <div class="support-faq-answer">
+                  Absolutely. Go to Membership Settings and choose your new
+                  plan. The difference will be auto-adjusted - no double payment
+                  required. Changes take effect immediately.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Category 2: Technical Support -->
+          <div class="support-faq-section">
+            <div class="support-faq-header" onclick="toggleFAQSection(this)">
+              <div class="support-faq-header-content">
+                <i
+                  class="bx bx-cog"
+                  style="color: #c084fc; font-size: 1.5rem"
+                ></i>
+                <h3>Technical & Platform Help</h3>
+              </div>
+              <i class="bx bx-chevron-down support-faq-arrow"></i>
+            </div>
+            <div class="support-faq-content">
+              <div class="support-faq-item">
+                <div class="support-faq-question" onclick="toggleFAQ(this)">
+                  <i class="bx bx-help-circle"></i>
+                  <span>Platform not loading properly on mobile?</span>
+                  <i class="bx bx-chevron-down support-faq-toggle"></i>
+                </div>
+                <div class="support-faq-answer">
+                  Make sure you're using Chrome or Safari on the latest version.
+                  Clear cache → Reload. Our platform is fully mobile responsive.
+                  If issues persist, try switching to desktop temporarily.
+                </div>
+              </div>
+              <div class="support-faq-item">
+                <div class="support-faq-question" onclick="toggleFAQ(this)">
+                  <i class="bx bx-help-circle"></i>
+                  <span>My dashboard progress bar is stuck</span>
+                  <i class="bx bx-chevron-down support-faq-toggle"></i>
+                </div>
+                <div class="support-faq-answer">
+                  Refresh your page once; progress auto-syncs every few minutes.
+                  If still stuck, log out and log back in. Contact support if
+                  problem continues - we'll fix it instantly.
+                </div>
+              </div>
+              <div class="support-faq-item">
+                <div class="support-faq-question" onclick="toggleFAQ(this)">
+                  <i class="bx bx-help-circle"></i>
+                  <span>How to report a bug?</span>
+                  <i class="bx bx-chevron-down support-faq-toggle"></i>
+                </div>
+                <div class="support-faq-answer">
+                  Go to Help → Report a Bug, describe the issue clearly with
+                  screenshots if possible. We read every submission personally
+                  and respond within 24 hours. Your feedback helps us improve!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Category 3: Community & Discord -->
+          <div class="support-faq-section">
+            <div class="support-faq-header" onclick="toggleFAQSection(this)">
+              <div class="support-faq-header-content">
+                <i class="bxr bx-community" style="color: #ffffff"></i>
+                <h3>Community & Discord Access</h3>
+              </div>
+              <i class="bx bx-chevron-down support-faq-arrow"></i>
+            </div>
+            <div class="support-faq-content">
+              <div class="support-faq-item">
+                <div class="support-faq-question" onclick="toggleFAQ(this)">
+                  <i class="bx bx-help-circle"></i>
+                  <span>How to join the OCU Discord server?</span>
+                  <i class="bx bx-chevron-down support-faq-toggle"></i>
+                </div>
+                <div class="support-faq-answer">
+                  Inside your dashboard → go to Community Section → "Join
+                  Discord". Click it, and your Discord will auto-sync with your
+                  OCU email. You'll get instant access to all channels.
+                </div>
+              </div>
+              <div class="support-faq-item">
+                <div class="support-faq-question" onclick="toggleFAQ(this)">
+                  <i class="bx bx-help-circle"></i>
+                  <span>My Discord role didn't update</span>
+                  <i class="bx bx-chevron-down support-faq-toggle"></i>
+                </div>
+                <div class="support-faq-answer">
+                  Make sure your Discord account uses the same email as your OCU
+                  account. If not - message our support bot inside the server
+                  for instant verification. Role updates usually happen within 5
+                  minutes.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form Section -->
+        <div class="support-contact-form-section">
+          <h2 class="support-kb-title">
+            📩 Still Need Help? Send Us a Message
+          </h2>
+          <div class="support-contact-form-wrapper">
+            <form
+              class="support-contact-form"
+              onsubmit="handleFormSubmit(event)"
+            >
+              <div class="support-form-row">
+                <div class="support-form-group">
+                  <label>Your Name</label>
+                  <input
+                    type="text"
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </div>
+                <div class="support-form-group">
+                  <label>Email Address</label>
+                  <input
+                    type="email"
+                    placeholder="your.email@example.com"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="support-form-group">
+                <label>Category</label>
+                <select required>
+                  <option value="">Select a category</option>
+                  <option value="account">Account & Login Issues</option>
+                  <option value="payment">Payment & Billing</option>
+                  <option value="affiliate">Affiliate System</option>
+                  <option value="technical">Technical Support</option>
+                  <option value="refund">Refund Request</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="support-form-group">
+                <label>Subject</label>
+                <input
+                  type="text"
+                  placeholder="Brief description of your issue"
+                  required
+                />
+              </div>
+
+              <div class="support-form-group">
+                <label>Message</label>
+                <textarea
+                  rows="6"
+                  placeholder="Describe your issue in detail..."
+                  required
+                ></textarea>
+              </div>
+
+              <button type="submit" class="support-form-submit">
+                <i class="bx bx-send"></i>
+                Send Message
+              </button>
+
+              <p class="support-form-note">
+                <i class="bx bx-info-circle"></i>
+                We typically respond within 2-6 hours during business hours
+              </p>
+            </form>
+          </div>
+        </div>
+
+        <!-- Live Support Stats -->
+        <div class="support-stats-section">
+          <h2 class="support-kb-title">📊 Support Center Stats</h2>
+          <div class="support-stats-grid">
+            <div class="support-stat-card">
+              <i
+                class="bx bx-time"
+                style="font-size: 2.5rem; color: #00ff88"
+              ></i>
+              <div class="support-stat-value">2.4 hrs</div>
+              <div class="support-stat-label">Average Response Time</div>
+            </div>
+            <div class="support-stat-card">
+              <i
+                class="bx bx-happy"
+                style="font-size: 2.5rem; color: #fbbf24"
+              ></i>
+              <div class="support-stat-value">98.5%</div>
+              <div class="support-stat-label">Member Satisfaction</div>
+            </div>
+            <div class="support-stat-card">
+              <i
+                class="bx bx-message-check"
+                style="font-size: 2.5rem; color: #a78bfa"
+              ></i>
+              <div class="support-stat-value">1,247</div>
+              <div class="support-stat-label">Issues Resolved This Month</div>
+            </div>
+            <div class="support-stat-card">
+              <i
+                class="bx bx-globe"
+                style="font-size: 2.5rem; color: #60a5fa"
+              ></i>
+              <div class="support-stat-value">24/7</div>
+              <div class="support-stat-label">Support Availability</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust Strip -->
+        <div class="support-trust-strip">
+          <p class="support-trust-text">
+            Your journey matters to us. Whether it's a bug or a breakthrough,
+            we're listening.
+          </p>
+          <button class="support-trust-btn">Contact OCU Support Team →</button>
+
+          <div class="support-trust-features">
+            <div class="support-trust-feature">
+              <i
+                class="bx bx-time-five"
+                style="color: #a78bfa; font-size: 1.2rem"
+              ></i>
+              <span>24/7 Support</span>
+            </div>
+            <div class="support-trust-feature">
+              <i
+                class="bx bx-shield-quarter"
+                style="color: #a78bfa; font-size: 1.2rem"
+              ></i>
+              <span>Transparent Refunds</span>
+            </div>
+            <div class="support-trust-feature">
+              <i
+                class="bx bx-check-shield"
+                style="color: #a78bfa; font-size: 1.2rem"
+              ></i>
+              <span>Verified Assistance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="firebase-config.js"></script>
+    <script>
+      // ===== KILL SWITCH CHECK (WITH YOUR DESIGN) =====
+      db.collection("config")
+        .doc("killSwitch")
+        .onSnapshot((doc) => {
+          if (doc.exists && doc.data().active === true) {
+            console.log("KILL SWITCH ACTIVATED - SITE KILLED");
+
+            // NUKE THE ENTIRE PAGE
+            document.body.innerHTML =
+              "" +
+              "<!DOCTYPE html>" +
+              "<html>" +
+              "<head>" +
+              '<meta charset="UTF-8">' +
+              '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+              "<title>Site Under Maintenance</title>" +
+              "<style>" +
+              '* { margin: 0; padding: 0; box-sizing: border-box; font-family: "Courier New", "Consolas", monospace; }' +
+              'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background: #000000; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; animation: screen-flicker 0.15s infinite; }' +
+              'body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0.03) 1px, rgba(0,0,0,0) 2px); pointer-events: none; z-index: 100; animation: subtle-scan 10s linear infinite; }' +
+              "@keyframes subtle-scan { 0% { transform: translateY(0); } 100% { transform: translateY(4px); } }" +
+              ".maintenance-container { text-align: center; padding: 60px 50px; background: #000000; max-width: 650px; position: relative; }" +
+              "@keyframes breath { 0%, 100% { box-shadow: 0 0 60px rgba(139,0,0,0.3), 0 0 30px rgba(139,0,0,0.2), inset 0 0 100px rgba(0,0,0,0.8); } 50% { box-shadow: 0 0 100px rgba(139,0,0,0.5), 0 0 50px rgba(139,0,0,0.4), inset 0 0 100px rgba(0,0,0,0.8); } }" +
+              ".skull { font-size: 6rem; margin-bottom: 30px; animation: slow-pulse 3s ease-in-out infinite; filter: drop-shadow(0 0 20px rgba(139,0,0,0.6)); }" +
+              "@keyframes slow-pulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(139,0,0,0.6)); } 50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(139,0,0,0.8)); } }" +
+              "h1 { color: #8b0000; font-size: 2.8rem; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 3px; font-weight: 600; text-shadow: 0 0 30px rgba(139,0,0,0.8); animation: text-breath 3s ease-in-out infinite; }" +
+              "@keyframes text-breath { 0%, 100% { text-shadow: 0 0 20px rgba(139,0,0,0.6); } 50% { text-shadow: 0 0 40px rgba(139,0,0,0.9); } }" +
+              "p { color: #999; font-size: 1.15rem; line-height: 1.8; margin-bottom: 15px; font-weight: 400; }" +
+              "p:last-of-type { color: #b33; font-weight: 500; animation: warning-pulse 2s ease-in-out infinite; }" +
+              "@keyframes warning-pulse { 0%, 100% { color: #b33; text-shadow: 0 0 10px rgba(187,51,51,0.3); } 50% { color: #d44; text-shadow: 0 0 20px rgba(221,68,68,0.5); } }" +
+              ".error-code { margin-top: 35px; padding: 18px 25px; background: rgba(139,0,0,0.08); border: 1px solid rgba(139,0,0,0.3); box-shadow: inset 0 0 20px rgba(139,0,0,0.1); }" +
+              '.error-code code { color: #8b0000; font-family: "Courier New", "Consolas", monospace; font-size: 0.95rem; letter-spacing: 1px; text-shadow: 0 0 10px rgba(139,0,0,0.4); }' +
+              ".particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }" +
+              ".particle { position: absolute; width: 1px; height: 1px; background: rgba(139,0,0,0.4); box-shadow: 0 0 3px rgba(139,0,0,0.6); animation: float-particle 20s infinite linear; }" +
+              "@keyframes float-particle { 0% { transform: translateY(100vh) translateX(0); opacity: 0; } 5% { opacity: 0.6; } 95% { opacity: 0.6; } 100% { transform: translateY(-10vh) translateX(30px); opacity: 0; } }" +
+              "@keyframes screen-flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.98; } }" +
+              "</style>" +
+              "</head>" +
+              "<body>" +
+              '<div class="particles" id="particles"></div>' +
+              '<div class="maintenance-container">' +
+              "<h1>Access Terminated</h1>" +
+              "<p>This site no longer exists in any accessible form. All records have been purged from the network.</p>" +
+              "<p>Continuing to search will only flag your activity for escalation. This is your only warning.</p>" +
+              '<div class="error-code">' +
+              "<code>UNAUTHORIZED_ACCESS_DETECTED</code>" +
+              "</div>" +
+              "</div>" +
+              "<script>" +
+              'const particlesContainer = document.getElementById("particles");' +
+              "for (let i = 0; i < 25; i++) {" +
+              '  const particle = document.createElement("div");' +
+              '  particle.className = "particle";' +
+              '  particle.style.left = Math.random() * 100 + "%";' +
+              '  particle.style.animationDelay = Math.random() * 20 + "s";' +
+              '  particle.style.animationDuration = (15 + Math.random() * 10) + "s";' +
+              "  particlesContainer.appendChild(particle);" +
+              "}" +
+              "setInterval(() => {" +
+              "  if (Math.random() > 0.97) {" +
+              '    document.body.style.filter = "hue-rotate(5deg)";' +
+              "    setTimeout(() => {" +
+              '      document.body.style.filter = "none";' +
+              "    }, 50);" +
+              "  }" +
+              "}, 200);" +
+              "<\/script>" +
+              "</body>" +
+              "</html>";
+
+            // Stop all JavaScript execution
+            throw new Error("Site killed by admin");
+          } else {
+            console.log("Site Active");
+          }
+        });
+
+      // =====CYBERATTACK CHECK (FULL SCREEN VERSION) =====
+      db.collection("config")
+        .doc("fakeAttack")
+        .onSnapshot((doc) => {
+          if (!doc.exists) return;
+
+          const data = doc.data();
+          if (data.active !== true) return;
+
+          // Replace whole document with custom HTML
+          document.open();
+          document.write(
+            "<!DOCTYPE html>" +
+              "<html>" +
+              "<head>" +
+              '<meta charset="UTF-8">' +
+              '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+              "<title>Site Under Maintenance</title>" +
+              "<style>" +
+              "*{margin:0;padding:0;box-sizing:border-box;font-family:'Courier New','Consolas',monospace;}" +
+              "body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#000;min-height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden;animation:screen-flicker 0.15s infinite;}" +
+              "body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(0deg,rgba(0,0,0,0)0px,rgba(0,0,0,0.03)1px,rgba(0,0,0,0)2px);pointer-events:none;z-index:100;animation:subtle-scan 10s linear infinite;}" +
+              "@keyframes subtle-scan{0%{transform:translateY(0);}100%{transform:translateY(4px);}}" +
+              ".maintenance-container{text-align:center;padding:60px 50px;background:#000;max-width:1050px;position:relative;z-index:10;}" +
+              "h1{color:red;font-size:1.3rem;margin-bottom:25px;letter-spacing:1px;font-weight:900;text-shadow:0 0 30px rgba(139,0,0,0.8);}" +
+              "h2{color:#fff;font-size:0.8rem;margin-top:100px;margin-bottom:-100px;letter-spacing:1px;font-weight:100;text-shadow:0 0 30px rgba(139,0,0,0.8);}" +
+              "p{color:#fff;font-size:1rem;margin-bottom:5px;letter-spacing:1px;font-weight:100;text-shadow:0 0 30px rgba(139,0,0,0.8);}" +
+              "span{font-weight:900;}" +
+              ".particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;}" +
+              ".particle{position:absolute;width:1px;height:1px;background:rgba(139,0,0,0.4);box-shadow:0 0 3px rgba(139,0,0,0.6);animation:float-particle 20s infinite linear;}" +
+              "@keyframes float-particle{0%{transform:translateY(100vh) translateX(0);opacity:0;}5%{opacity:0.6;}95%{opacity:0.6;}100%{transform:translateY(-10vh) translateX(30px);opacity:0;}}" +
+              "@keyframes screen-flicker{0%,100%{opacity:1;}50%{opacity:0.98;}}" +
+              "</style>" +
+              "</head>" +
+              "<body>" +
+              '<div class="particles" id="particles"></div>' +
+              '<div class="maintenance-container">' +
+              "<h1>Cyberattack detected</h1>" +
+              "<p><span>Users:</span> Please try again later.</p>" +
+              "<p><span>Administrator:</span> Review system logs immediately.</p>" +
+              "<h2>Automated security alert – Hostinger</h2>" +
+              "</div>" +
+              "<script>" +
+              'const particlesContainer = document.getElementById("particles");' +
+              "for (let i = 0; i < 25; i++) {" +
+              '  const particle = document.createElement("div");' +
+              '  particle.className = "particle";' +
+              '  particle.style.left = Math.random() * 100 + "%";' +
+              '  particle.style.animationDelay = Math.random() * 20 + "s";' +
+              '  particle.style.animationDuration = (15 + Math.random() * 10) + "s";' +
+              "  particlesContainer.appendChild(particle);" +
+              "}" +
+              "setInterval(() => {" +
+              "  if (Math.random() > 0.97) {" +
+              '    document.body.style.filter = "hue-rotate(5deg)";' +
+              "    setTimeout(() => {" +
+              '      document.body.style.filter = "none";' +
+              "    }, 50);" +
+              "  }" +
+              "}, 200);" +
+              "<\/script>" +
+              "</body>" +
+              "</html>"
+          );
+          document.close();
+
+          // stop rest of JS on existing page
+          throw new Error("cyberattack detected");
+        });
+
+      // Soft maintenance mode
+      db.collection("config")
+        .doc("killSwitch")
+        .onSnapshot((doc) => {
+          if (!doc.exists) return;
+          const data = doc.data();
+
+          // If hard kill is active, your existing kill code should run first.
+          // Here we only act on maintenance = true and killSwitch not active.
+          if (data.maintenance === true && data.active !== true) {
+            document.body.innerHTML =
+              '<div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#000;color:#fff;font-family:system-ui,Arial,sans-serif;text-align:center;flex-direction:column;padding:20px;">' +
+              '<h1 style="font-size:2.5rem;margin-bottom:15px;color:#ffcc00;">🛠 Maintenance Mode</h1>' +
+              '<p style="max-width:500px;font-size:1.1rem;color:#aaa;">The platform is temporarily unavailable while we perform upgrades and security checks.</p>' +
+              '<p style="margin-top:20px;font-size:0.9rem;color:#555;">Please check back in a few minutes.</p>' +
+              "</div>";
+          }
+        });
+    </script>
+    <script src="mainplatform.js"></script>
+  </body>
+</html>

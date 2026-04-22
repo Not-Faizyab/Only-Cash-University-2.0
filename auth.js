@@ -2,37 +2,7 @@
 let currentUser = null;
 let isSigningUp = false;
 
-// ✅ ADD THIS - Clear any invalid auth state on auth page load
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    // Verify the user's credential is still valid
-    user
-      .reload()
-      .then(() => {
-        console.log("✅ Auth token is valid");
-        currentUser = user;
-
-        if (!isSigningUp) {
-          // Check if sysadmin
-          if (user.email === "sysadmin@onlycashuniversity.com") {
-            window.location.href = "sysadmin.html";
-          }
-          // Check if admin
-          else if (user.email === "admin@onlycashuniversity.com") {
-            window.location.href = "admin.html";
-          }
-        }
-      })
-      .catch((error) => {
-        // Token is invalid/expired - sign out and clear
-        console.log("❌ Invalid auth token, clearing session");
-        auth.signOut();
-        currentUser = null;
-      });
-  } else {
-    currentUser = null;
-  }
-});
+// Part of code removed due to security concerns regarding uploading to github
 
 // ===== CHECK URL PARAMETER FOR TAB =====
 window.addEventListener("load", function () {
